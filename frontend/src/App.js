@@ -46,6 +46,7 @@ const router = createBrowserRouter([
             index: true,
             element: <EventsPage />,
             loader: async () => {
+              //some truble here
               return null;
             },
           },
