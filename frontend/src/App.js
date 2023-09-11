@@ -46,26 +46,8 @@ const router = createBrowserRouter([
             index: true,
             element: <EventsPage />,
             loader: async () => {
-              try {
-                const response = await fetch(requestConfig.url, {
-                  method: requestConfig.method ? requestConfig.method : "GET",
-                  headers: requestConfig.headers ? requestConfig.headers : {},
-                  body: requestConfig.body
-                    ? JSON.stringify(requestConfig.body)
-                    : null,
-                });
-
-                if (!response.ok) {
-                  throw new Error("Request failed!");
-                }
-
-                const data = await response.json();
-                applyData(data.events);
-
-                setIsloading(false);
-              } catch (error) {
-                setError(error.message || "Somting went wrong");
-              }
+              //Some problem here.. I cant't fugure out how to use custom hook here..Can i use distructuring object with necessary paramenters here from hook or move some logic from this one
+              return null;
             },
           },
           { path: ":eventId", element: <EventDetailPage /> },
