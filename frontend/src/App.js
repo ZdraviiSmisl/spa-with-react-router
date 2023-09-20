@@ -1,40 +1,24 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./Pages/Home";
-import EventsPage from "./Pages/Events";
-import EventDetailPage from "./Pages/EventDetail";
-import NewEventPage from "./Pages/NewEvent";
+import EventsPage, { loader as eventLoader } from "./Pages/Events";
+import EventDetailPage, {
+  loader as eventDitailLoader,
+  action as eventDitailAction,
+} from "./Pages/EventDetail";
+import NewEventPage, { action as eventAction } from "./Pages/NewEvent";
 import EditEventPage from "./Pages/EditEvent";
 import RootLayout from "./Pages/Root";
 import EventsRootLayout from "./Pages/EventsLayout";
+import ErrorPage from "./Pages/Error";
 
-import useHttp from "./components/hooks/response-hook";
+//In order to unload the app.js component we can move logic of the loader function  to that component where on which we assigned the rout.. In this case it's the event page.. And in app.js component we can call it as Eventloader using alias in import loader function.. EventLoader(name can be any) will be a pointer to function has being determined in events page.
 
-// Challenge / Exercise
-
-// 1. Add five new (dummy) page components (content can be simple <h1> elements)
-//    - HomePage
-//    - EventsPage
-//    - EventDetailPage
-//    - NewEventPage
-//    - EditEventPage
-// 2. Add routing & route definitions for these five pages
-//    - / => HomePage
-//    - /events => EventsPage
-//    - /events/<some-id> => EventDetailPage
-//    - /events/new => NewEventPage
-//    - /events/<some-id>/edit => EditEventPage
-// 3. Add a root layout that adds the <MainNavigation> component above all page components
-// 4. Add properly working links to the MainNavigation
-// 5. Ensure that the links in MainNavigation receive an "active" class when active
-// 6. Output a list of dummy events to the EventsPage
-//    Every list item should include a link to the respective EventDetailPage
-// 7. Output the ID of the selected event on the EventDetailPage
-// BONUS: Add another (nested) layout route that adds the <EventNavigation> component above all /events... page components
-
+//Is's  possable to use error element at the any level of nesting but enough to set it at the top of hierarchy..Doing it this way we ensure that all mistakes occuring at any lavel will be bobbled up.. !ERORR Element works including for errors occuring dispite sending and geting request. NOt only for useing wrong url address
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
 
@@ -45,14 +29,24 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <EventsPage />,
-            loader: async () => {
-              //Some problem here.. I cant't fugure out how to use custom hook here..Can i use distructuring object with necessary paramenters here from hook or move some logic from this one
-              return null;
-            },
+            loader: eventLoader,
           },
-          { path: ":eventId", element: <EventDetailPage /> },
-          { path: "new", element: <NewEventPage /> },
-          { path: ":eventId/edit", element: <EditEventPage /> },
+
+          {
+            path: ":eventId",
+            id: "event-detail",
+            loader: eventDitailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetailPage />,
+                action: eventDitailAction,
+              },
+              { path: "edit", element: <EditEventPage /> },
+            ],
+          },
+
+          { path: "new", element: <NewEventPage />, action: eventAction },
         ],
       },
     ],
