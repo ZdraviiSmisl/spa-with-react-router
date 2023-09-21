@@ -5,11 +5,12 @@ import EventDetailPage, {
   loader as eventDitailLoader,
   action as eventDitailAction,
 } from "./Pages/EventDetail";
-import NewEventPage, { action as eventAction } from "./Pages/NewEvent";
+import NewEventPage from "./Pages/NewEvent";
 import EditEventPage from "./Pages/EditEvent";
 import RootLayout from "./Pages/Root";
 import EventsRootLayout from "./Pages/EventsLayout";
 import ErrorPage from "./Pages/Error";
+import { action as ManipulateEventsAction } from "./components/EventForm";
 
 //In order to unload the app.js component we can move logic of the loader function  to that component where on which we assigned the rout.. In this case it's the event page.. And in app.js component we can call it as Eventloader using alias in import loader function.. EventLoader(name can be any) will be a pointer to function has being determined in events page.
 
